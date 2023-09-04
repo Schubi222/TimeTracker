@@ -10,5 +10,9 @@
     {
       "path": "./tsconfig.vitest.json"
     }
-  ]
+  ],
+  "types": ["node"],
+  "compilerOptions": {
+    "strict": true
+  }
 }

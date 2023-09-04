@@ -32,3 +32,5 @@ coverage
 *.css.map
 *.sass.map
 *.scss.map
+
+serviceAccount.json
