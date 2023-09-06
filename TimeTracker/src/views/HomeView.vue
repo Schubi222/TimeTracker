@@ -38,13 +38,9 @@
 
   <v-card>
     <v-card-item>
-
         <v-table>
           <thead>
             <tr>
-              <th class="text-left">
-                ID
-              </th>
               <th class="text-left">
                 Category
               </th>
@@ -61,10 +57,9 @@
           </thead>
           <tbody>
           <tr
-              v-for="entry in entries?.docs"
-              :key="entry.data().id"
+              v-for="entry in entries"
+              :key="entry.data().date"
           >
-            <td>{{ entry.data().id }}</td>
             <td>{{ entry.data().category }}</td>
             <td>{{ entry.data().time }}</td>
             <td>{{ entry.data().cause }}</td>
@@ -87,7 +82,7 @@ import {computed, onMounted, ref} from "vue";
 
   import type {VForm} from "vuetify/components";
 
-  import {collection,doc,getDocs} from "firebase/firestore"
+  import {collection,doc,getDocs,setDoc, addDoc, serverTimestamp} from "firebase/firestore"
   import type {QueryDocumentSnapshot, DocumentData, QuerySnapshot} from "firebase/firestore"
 
 
@@ -99,7 +94,7 @@ import {computed, onMounted, ref} from "vue";
   const cause = ref('')
   const category = ref(categories.value[0])
 
-  const entries = ref<QuerySnapshot | undefined>()
+  const entries = ref<QueryDocumentSnapshot[] | undefined>()
 
   const form = ref<undefined|VForm>()
 
@@ -111,16 +106,30 @@ import {computed, onMounted, ref} from "vue";
   const validateForm = async () =>{
 
     const valid = await form.value?.validate()
-    if(valid?.valid){
-      const newEntry:Entry = {time:time.value,category:category.value,cause:cause.value, date:Date.now()}
 
-      // console.log(data)
+    if(valid?.valid){
+      const newEntry = {
+        time:time.value,
+        category:category.value,
+        cause:cause.value,
+        date:serverTimestamp(),
+        userid:1,
+      }
+      const ret = await addDoc(collection(db, "Entries"), newEntry)
+      console.log(ret)
+
     }
   }
 
+  function compareNumbers(a:QueryDocumentSnapshot, b:QueryDocumentSnapshot) {
+    return a.data().date - b.data().date;
+  }
+
   onMounted(async () =>{
-    entries.value = (await getDocs(collection(db, "Entries")))
+    entries.value = ((await getDocs(collection(db, "Entries"))).docs.sort(compareNumbers))
   })
+
+
 </script>
 
 <style scoped>
