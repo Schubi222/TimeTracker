@@ -26,7 +26,7 @@
             <td>{{ entry.data().category }}</td>
             <td>{{ entry.data().time }}</td>
             <td>{{ entry.data().cause }}</td>
-            <td>{{ entry.data().date }}</td>
+            <td>{{dateConvert(entry.data()) }}</td>
           </tr>
         </tbody>
       </v-table>
@@ -38,9 +38,16 @@
 
 import {defineStore, storeToRefs} from "pinia";
 import {useEntryStore} from "@/stores/entry";
+import localizedDate from 'dayjs/plugin/localizedFormat'
+import dayjs from "dayjs";
+import type {QueryDocumentSnapshot} from "@firebase/firestore";
 
 const store = useEntryStore()
 const {entries} = storeToRefs(store)
+
+const dateConvert = (s:any) => {
+  return dayjs(s.date.toDate()).format('DD/MM/YY')
+}
 
 </script>
 

@@ -44,8 +44,9 @@
 
   import type Entry from "@/types/Entry";
   import type {VForm} from "vuetify/components";
+  import {useEntryStore} from "@/stores/entry";
 
-
+  const store = useEntryStore()
 
   const categories = ref(['Dev', 'Total'])
   const time = ref('00:00')
@@ -65,7 +66,7 @@
     const valid = await form.value?.validate()
 
     if(valid?.valid){
-      const newEntry:Entry = {
+      const newEntry = {
         time:time.value,
         category:category.value,
         cause:cause.value,
@@ -73,7 +74,7 @@
         userid:1,
       }
       const ret = await addDoc(collection(db, "Entries"), newEntry)
-      console.log(ret)
+      await store.reloadEntries()
 
     }
   }
