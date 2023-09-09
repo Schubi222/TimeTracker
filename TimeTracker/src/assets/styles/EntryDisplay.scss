@@ -1,0 +1,14 @@
+@use "variables";
+.Select-Wrapper{
+  display: flex;
+  gap: 15px;
+  width: 100%;
+  .Sort-Select{
+    max-width: 200px;
+  }
+  .Sort-Submit-Btn{
+    width: 150px;
+    height: 56px;
+
+  }
+}

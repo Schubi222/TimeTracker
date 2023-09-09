@@ -1,0 +1,14 @@
+.Select-Wrapper {
+  display: flex;
+  gap: 15px;
+  width: 100%;
+}
+.Select-Wrapper .Sort-Select {
+  max-width: 200px;
+}
+.Select-Wrapper .Sort-Submit-Btn {
+  width: 150px;
+  height: 56px;
+}
+
+/*# sourceMappingURL=EntryDisplay.css.map */

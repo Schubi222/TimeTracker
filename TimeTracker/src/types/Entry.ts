@@ -7,3 +7,10 @@ export default interface Entry{
     date: FieldValue;
     userid: number;
 }
+
+export enum sortable {
+    category = "category",
+    time = "time",
+    cause = "cause",
+    date = "date",
+}

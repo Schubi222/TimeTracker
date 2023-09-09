@@ -1,0 +1,27 @@
+@use "variables";
+
+.Background-Wrapper{
+  width: 100vw;
+  height: 100vh;
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: -1;
+  &__basic-top{
+    width: 90vw;
+    height: 5%;
+    position: absolute;
+    background: variables.$primary-color;
+    filter: blur(100px);
+    top: 20%;
+  }
+  &__left-top{
+    rotate: 45deg;
+    left: -10%;
+  }
+  &__right-top{
+    rotate: 315deg;
+    right: -10%;
+
+  }
+}

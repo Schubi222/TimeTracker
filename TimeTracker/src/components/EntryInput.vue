@@ -1,6 +1,5 @@
 <template>
-  <v-card width="300" class="mx-auto">
-    <v-card-item>
+    <v-card-item class="mx-auto Entry-Input-Card" variant="tonal">
       <v-form @submit.prevent="validateForm" ref="form">
         <v-text-field
             type="time"
@@ -25,19 +24,19 @@
             label="Select category:"
             v-model="category"
             :items="categories"
-            chips
+            :chips=true
             required
         >
         </v-select>
 
-        <v-btn type="submit" block class="mt-2">Submit</v-btn>
+        <v-btn type="submit" :block="true" class="mt-2">Submit</v-btn>
       </v-form>
     </v-card-item>
-  </v-card>
+
 </template>
 
 <script setup lang="ts">
-  import {ref} from "vue";
+import {onMounted, ref} from "vue";
 
   import {collection, addDoc, serverTimestamp} from "firebase/firestore"
   import db from "@/firestore/firestoreInit";
@@ -45,13 +44,14 @@
   import type Entry from "@/types/Entry";
   import type {VForm} from "vuetify/components";
   import {useEntryStore} from "@/stores/entry";
+  import {storeToRefs} from "pinia";
 
   const store = useEntryStore()
+  const {categories} = storeToRefs(store)
 
-  const categories = ref(['Dev', 'Total'])
   const time = ref('00:00')
   const cause = ref('')
-  const category = ref(categories.value[0])
+  const category = ref()
 
 
   const form = ref<undefined|VForm>()
@@ -78,9 +78,17 @@
 
     }
   }
+  onMounted(async () => {
+    await store.loadCategories()
+    category.value = categories.value[0]
+
+  })
 
 </script>
 
 <style scoped>
-
+.Entry-Input-Card{
+  max-width: 300px;
+  width: 100%;
+}
 </style>

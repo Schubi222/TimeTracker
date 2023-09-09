@@ -1,56 +1,72 @@
 <template>
-  <v-card>
-    <v-card-item>
-      <v-table>
-        <thead>
-          <tr>
-            <th class="text-left">
-              Category
-            </th>
-            <th class="text-left">
-              Time
-            </th>
-            <th class="text-left">
-              Cause
-            </th>
-            <th class="text-left">
-              Date
-            </th>
-          </tr>
-        </thead>
-        <tbody v-if="entries">
-          <tr
-              v-for="entry in entries"
-              :key="entry.data().date"
-          >
-            <td>{{ entry.data().category }}</td>
-            <td>{{ entry.data().time }}</td>
-            <td>{{ entry.data().cause }}</td>
-            <td>{{dateConvert(entry.data()) }}</td>
-          </tr>
-        </tbody>
-      </v-table>
-    </v-card-item>
-  </v-card>
+  <v-card-item>
+    <div class="Select-Wrapper">
+      <v-select
+        :items="tableHeadlines"
+        v-model="metricToSortBy"
+        label="Sort by:"
+        class="Sort-Select"
+      >
+      </v-select>
+      <v-select
+        :items="['Ascending', 'Descending']"
+        v-model="directionToSortBy"
+        label="Order:"
+        class="Sort-Select"
+      >
+      </v-select>
+      <v-btn type="submit" class="Sort-Submit-Btn" @click="reOrderByMetric">Submit</v-btn>
+    </div>
+
+    <v-table>
+      <thead>
+        <tr>
+          <th class="text-left">Category</th>
+          <th class="text-left">Time</th>
+          <th class="text-left">Cause</th>
+          <th class="text-left">Date</th>
+        </tr>
+      </thead>
+      <tbody v-if="entries">
+        <tr v-for="entry in entries" :key="entry.data().date">
+          <td>{{ entry.data().category }}</td>
+          <td>{{ entry.data().time }}</td>
+          <td>{{ entry.data().cause }}</td>
+          <td>{{ dateConvert(entry.data()) }}</td>
+        </tr>
+      </tbody>
+    </v-table>
+  </v-card-item>
 </template>
 
 <script setup lang="ts">
-
-import {defineStore, storeToRefs} from "pinia";
-import {useEntryStore} from "@/stores/entry";
+import { defineStore, storeToRefs } from 'pinia'
+import { useEntryStore } from '@/stores/entry'
 import localizedDate from 'dayjs/plugin/localizedFormat'
-import dayjs from "dayjs";
-import type {QueryDocumentSnapshot} from "@firebase/firestore";
+import dayjs from 'dayjs'
+import type { QueryDocumentSnapshot } from '@firebase/firestore'
+import { sortEntriesByMetric } from '@/helper/SortFirestoreEntries'
+import { ref } from 'vue'
+import type { sortable } from '@/types/Entry'
 
 const store = useEntryStore()
-const {entries} = storeToRefs(store)
+const { entries } = storeToRefs(store)
 
-const dateConvert = (s:any) => {
+const tableHeadlines = ref(['category', 'time', 'cause', 'date'])
+const metricToSortBy = ref<sortable>('date' as sortable.date)
+const directionToSortBy = ref('Ascending')
+
+const dateConvert = (s: any) => {
   return dayjs(s.date.toDate()).format('DD/MM/YY')
 }
 
+const reOrderByMetric = () => {
+  entries.value = entries.value?.sort((a, b) => {
+    return sortEntriesByMetric(a, b, metricToSortBy.value, directionToSortBy.value === 'Ascending')
+  })
+}
 </script>
 
 <style scoped>
-
+@import '@/assets/styles/EntryDisplay.css';
 </style>
