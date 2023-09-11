@@ -27,27 +27,28 @@
           <th class="text-left">Date</th>
         </tr>
       </thead>
-      <tbody v-if="entries">
+      <tbody v-if="entries && entries.length !== 0">
         <tr v-for="entry in entries" :key="entry.data().date">
           <td>{{ entry.data().category }}</td>
-          <td>{{ entry.data().time }}</td>
+          <td>{{ FormatDate(entry.data().time) }}</td>
           <td>{{ entry.data().cause }}</td>
           <td>{{ dateConvert(entry.data()) }}</td>
         </tr>
       </tbody>
+      <div v-else class="pa-5">There is no data yet</div>
     </v-table>
   </v-card-item>
 </template>
 
 <script setup lang="ts">
-import { defineStore, storeToRefs } from 'pinia'
+import { storeToRefs } from 'pinia'
 import { useEntryStore } from '@/stores/entry'
-import localizedDate from 'dayjs/plugin/localizedFormat'
 import dayjs from 'dayjs'
 import type { QueryDocumentSnapshot } from '@firebase/firestore'
 import { sortEntriesByMetric } from '@/helper/SortFirestoreEntries'
 import { ref } from 'vue'
 import type { sortable } from '@/types/Entry'
+import {FormatDate} from "@/helper/FormatTime";
 
 const store = useEntryStore()
 const { entries } = storeToRefs(store)

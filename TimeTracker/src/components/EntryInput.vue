@@ -45,6 +45,7 @@ import {onMounted, ref} from "vue";
   import type {VForm} from "vuetify/components";
   import {useEntryStore} from "@/stores/entry";
   import {storeToRefs} from "pinia";
+import {calculateMinutesFromString} from "@/helper/CalculateTime";
 
   const store = useEntryStore()
   const {categories} = storeToRefs(store)
@@ -67,13 +68,15 @@ import {onMounted, ref} from "vue";
 
     if(valid?.valid){
       const newEntry = {
-        time:time.value,
+        time:calculateMinutesFromString(time.value),
         category:category.value,
         cause:cause.value,
         date:serverTimestamp(),
         userid:1,
       }
-      const ret = await addDoc(collection(db, "Entries"), newEntry)
+     await addDoc(collection(db, "Entries"), newEntry).catch(() =>{
+        alert('Something went wrong. Could not add entry!')
+      })
       await store.reloadEntries()
 
     }

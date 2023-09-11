@@ -2,7 +2,8 @@
   <div class="Home-View-Wrapper">
     <v-card class="Home-View-Card">
       <EntryInput class="Entry-Input"/>
-        <EntryStatistics/>
+      <EntryStatistics/>
+      <GoalStatistics/>
       <EntryDisplay/>
     </v-card>
   </div>
@@ -16,6 +17,7 @@ import EntryInput from "@/components/EntryInput.vue";
 import {useEntryStore} from "@/stores/entry";
 import {storeToRefs} from "pinia";
 import EntryStatistics from "@/components/EntryStatistics.vue";
+import GoalStatistics from "@/components/GoalStatistics.vue";
 
 
 
