@@ -45,7 +45,7 @@ import {onMounted, ref} from "vue";
   import type {VForm} from "vuetify/components";
   import {useEntryStore} from "@/stores/entry";
   import {storeToRefs} from "pinia";
-import {calculateMinutesFromString} from "@/helper/CalculateTime";
+  import {calculateMinutesFromString} from "@/helper/CalculateTime";
 
   const store = useEntryStore()
   const {categories} = storeToRefs(store)

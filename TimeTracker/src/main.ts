@@ -14,9 +14,9 @@ import * as directives from 'vuetify/directives'
 
 import { library } from '@fortawesome/fontawesome-svg-core'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
-import {faCircleChevronUp } from "@fortawesome/free-solid-svg-icons";
+import {faCircleChevronUp,  faHouse, faChartPie, faTable, faGear} from "@fortawesome/free-solid-svg-icons";
 /* add icons to the library */
-library.add(faCircleChevronUp )
+library.add(faCircleChevronUp, faHouse, faChartPie, faTable, faGear )
 
 const vuetify = createVuetify({
     components,
