@@ -35,9 +35,9 @@
         <v-card>
           <EntryInput class="Entry-Input"/>
           <div class="Statistics-Wrapper">
-            <GoalStatistics/>
-            <EntryStatistics/>
-            <MissingTimeStatistics/>
+            <TimeStatistic :stat="goalTimeMapping" :text="'Goal'"/>
+            <TimeStatistic :stat="totalTimePerCategory" :text="'Done'"/>
+            <TimeStatistic :stat="missingTimePerCategory" :text="'Missing'"/>
           </div>
 
         </v-card>
@@ -82,12 +82,12 @@ import EntryInput from "@/components/EntryInput.vue";
 import {useEntryStore} from "@/stores/entry";
 import {storeToRefs} from "pinia";
 import EntryStatistics from "@/components/EntryStatistics.vue";
-import GoalStatistics from "@/components/GoalStatistics.vue";
 import {ref} from "vue";
-import MissingTimeStatistics from "@/components/MissingTimeStatistics.vue";
+import TimeStatistic from "@/components/TimeStatistic.vue";
 
 
-
+const store = useEntryStore()
+const {goalTimeMapping, missingTimePerCategory,totalTimePerCategory} = storeToRefs(store)
 const tab = ref('tab-1')
 
 </script>
