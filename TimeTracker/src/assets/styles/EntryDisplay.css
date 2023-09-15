@@ -11,4 +11,14 @@
   height: 56px;
 }
 
+.Delete-Entry {
+  cursor: pointer;
+  font-size: 30px;
+  transition: all 0.4s;
+}
+.Delete-Entry:hover {
+  color: #525252;
+  transform: scale(1.2);
+}
+
 /*# sourceMappingURL=EntryDisplay.css.map */

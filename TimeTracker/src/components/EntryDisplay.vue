@@ -25,6 +25,7 @@
           <th class="text-left">Time</th>
           <th class="text-left">Cause</th>
           <th class="text-left">Date</th>
+          <th></th>
         </tr>
       </thead>
       <tbody v-if="entries && entries.length !== 0">
@@ -33,6 +34,7 @@
           <td>{{ FormatDate(entry.data().time) }}</td>
           <td>{{ entry.data().cause }}</td>
           <td>{{ dateConvert(entry.data()) }}</td>
+          <td><font-awesome-icon icon="fa-solid fa-trash" class="Delete-Entry" @click="handleDelete(entry)"/></td>
         </tr>
       </tbody>
       <div v-else class="pa-5">There is no data yet</div>
@@ -45,10 +47,12 @@ import { storeToRefs } from 'pinia'
 import { useEntryStore } from '@/stores/entry'
 import dayjs from 'dayjs'
 import type { QueryDocumentSnapshot } from '@firebase/firestore'
+import { deleteDoc, doc } from '@firebase/firestore'
 import { sortEntriesByMetric } from '@/helper/SortFirestoreEntries'
 import { ref } from 'vue'
 import type { sortable } from '@/types/Entry'
 import {FormatDate} from "@/helper/FormatTime";
+import db from "@/firestore/firestoreInit";
 
 const store = useEntryStore()
 const { entries } = storeToRefs(store)
@@ -65,6 +69,13 @@ const reOrderByMetric = () => {
   entries.value = entries.value?.sort((a, b) => {
     return sortEntriesByMetric(a, b, metricToSortBy.value, directionToSortBy.value === 'Ascending')
   })
+}
+
+const handleDelete = async (entry:QueryDocumentSnapshot) =>{
+
+  await deleteDoc(doc(db, "Entries", entry.id));
+  await store.reloadEntries()
+
 }
 </script>
 

@@ -29,7 +29,7 @@
         >
         </v-select>
 
-        <v-btn type="submit" :block="true" class="mt-2">Submit</v-btn>
+        <v-btn type="submit" :block="true" class="mt-2 Entry-Input-Submit">Submit</v-btn>
       </v-form>
     </v-card-item>
 
@@ -91,7 +91,13 @@ import {onMounted, ref} from "vue";
 
 <style scoped>
 .Entry-Input-Card{
+  margin:10px 0;
   max-width: 300px;
   width: 100%;
+  box-shadow: 1px 1px 5px 1px #dedede;
+}
+.Entry-Input-Submit{
+  border: 1px solid #dedede !important;
+  padding: 5px;
 }
 </style>
