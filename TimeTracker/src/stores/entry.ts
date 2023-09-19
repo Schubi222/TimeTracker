@@ -1,10 +1,11 @@
 import {ref, computed, onMounted, onBeforeMount} from 'vue'
 import { defineStore } from 'pinia'
-import {collection, getDocs, QueryDocumentSnapshot, doc, getDoc} from "firebase/firestore";
+import {QueryDocumentSnapshot} from "firebase/firestore";
 import db from "@/firestore/firestoreInit";
 
 import { sortEntriesByMetric} from "@/helper/SortFirestoreEntries";
 import {calculateTotalTime} from "@/helper/CalculateTime";
+import {getDocFromFirestore, getSortedDocs} from "@/helper/FirestoreInteraction";
 
 export const useEntryStore = defineStore('entry', () => {
   const entries = ref<QueryDocumentSnapshot[] | undefined>()
@@ -18,16 +19,13 @@ export const useEntryStore = defineStore('entry', () => {
    * Reloads Entries from DB and recalculates totalTimeSpentList
    * */
   const reloadEntries = async () =>{
-    entries.value = ((await getDocs(collection(db, "Entries"))).docs
-        .sort((a,b)=>
-            sortEntriesByMetric(a,b,'date')))
-
+    entries.value = await getSortedDocs("Entries")
     totalTimeSpent()
     calculateTotalTimePerCategory()
     await calculateMissingTime()
   }
   const loadCategories = async () =>{
-    categories.value = ((await getDoc(doc(db, "Categories", "Predefined"))))?.data()?.Name
+    categories.value = (await getDocFromFirestore("Categories", "Predefined"))?.data()?.Name
   }
 
   const totalTimeSpent = () =>{
@@ -59,8 +57,8 @@ export const useEntryStore = defineStore('entry', () => {
   }
 
   const calculateMissingTime = async () => {
-    const test = (await getDoc(doc(db, "Categories", "Predefined")))?.data()?.CategoryTimeGoalMap
-    for (const testElement of Object.entries(test[0])) {
+    const GoalTimeMap = (await getDocFromFirestore("Categories", "Predefined"))?.data()?.CategoryTimeGoalMap
+    for (const testElement of Object.entries(GoalTimeMap)) {
       if (typeof testElement[1] !== "number") return
       goalTimeMapping.value.set(testElement[0], testElement[1])
     }
@@ -81,5 +79,5 @@ export const useEntryStore = defineStore('entry', () => {
 
   return {
     entries, reloadEntries, categories, totalTimeSpentList, loadCategories,
-    missingTimePerCategory,totalTimePerCategory, goalTimeMapping }
+    missingTimePerCategory,totalTimePerCategory, goalTimeMapping, calculateMissingTime }
 })

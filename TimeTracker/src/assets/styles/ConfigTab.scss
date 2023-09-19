@@ -1,0 +1,15 @@
+@use "variables";
+
+.Setting-Heading-Wrapper{
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  .Edit-Btn{
+    transition: all .4s;
+    cursor: pointer;
+    &:hover{
+      color: #525252;
+      transform: scale(1.2);
+    }
+  }
+}

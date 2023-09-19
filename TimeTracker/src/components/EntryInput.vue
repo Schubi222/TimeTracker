@@ -38,14 +38,14 @@
 <script setup lang="ts">
 import {onMounted, ref} from "vue";
 
-  import {collection, addDoc, serverTimestamp} from "firebase/firestore"
-  import db from "@/firestore/firestoreInit";
+  import {serverTimestamp} from "firebase/firestore"
 
-  import type Entry from "@/types/Entry";
   import type {VForm} from "vuetify/components";
   import {useEntryStore} from "@/stores/entry";
   import {storeToRefs} from "pinia";
   import {calculateMinutesFromString} from "@/helper/CalculateTime";
+  import {timeValidation} from "@/assets/rules/timeValidationRules";
+  import {addDocToFirestore} from "@/helper/FirestoreInteraction";
 
   const store = useEntryStore()
   const {categories} = storeToRefs(store)
@@ -54,13 +54,7 @@ import {onMounted, ref} from "vue";
   const cause = ref('')
   const category = ref()
 
-
   const form = ref<undefined|VForm>()
-
-  const timeValidation = [
-    (time:string) => time !== '00:00' || "Enter a correct time",
-    (time:string) => time !== '' || "Enter a correct time",
-  ]
 
   const validateForm = async () =>{
 
@@ -74,9 +68,7 @@ import {onMounted, ref} from "vue";
         date:serverTimestamp(),
         userid:1,
       }
-     await addDoc(collection(db, "Entries"), newEntry).catch(() =>{
-        alert('Something went wrong. Could not add entry!')
-      })
+      await addDocToFirestore(newEntry)
       await store.reloadEntries()
 
     }

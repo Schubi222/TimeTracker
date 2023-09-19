@@ -57,7 +57,7 @@
 
       <v-window-item value="tab-4">
         <v-card>
-          CONFIG
+          <ConfigTab/>
         </v-card>
       </v-window-item>
 
@@ -84,6 +84,7 @@ import {storeToRefs} from "pinia";
 import EntryStatistics from "@/components/EntryStatistics.vue";
 import {ref} from "vue";
 import TimeStatistic from "@/components/TimeStatistic.vue";
+import ConfigTab from "@/components/ConfigTab.vue";
 
 
 const store = useEntryStore()

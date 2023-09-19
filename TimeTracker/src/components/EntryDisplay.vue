@@ -31,7 +31,7 @@
       <tbody v-if="entries && entries.length !== 0">
         <tr v-for="entry in entries" :key="entry.data().date">
           <td>{{ entry.data().category }}</td>
-          <td>{{ FormatDate(entry.data().time) }}</td>
+          <td>{{ FormatDateToHHmm(entry.data().time) }}</td>
           <td>{{ entry.data().cause }}</td>
           <td>{{ dateConvert(entry.data()) }}</td>
           <td><font-awesome-icon icon="fa-solid fa-trash" class="Delete-Entry" @click="handleDelete(entry)"/></td>
@@ -51,8 +51,9 @@ import { deleteDoc, doc } from '@firebase/firestore'
 import { sortEntriesByMetric } from '@/helper/SortFirestoreEntries'
 import { ref } from 'vue'
 import type { sortable } from '@/types/Entry'
-import {FormatDate} from "@/helper/FormatTime";
+import {FormatDate, FormatDateToHHmm} from "@/helper/FormatTime";
 import db from "@/firestore/firestoreInit";
+import {deleteDocFromFirestore} from "@/helper/FirestoreInteraction";
 
 const store = useEntryStore()
 const { entries } = storeToRefs(store)
@@ -73,7 +74,7 @@ const reOrderByMetric = () => {
 
 const handleDelete = async (entry:QueryDocumentSnapshot) =>{
 
-  await deleteDoc(doc(db, "Entries", entry.id));
+  await deleteDocFromFirestore("Entries", entry.id)
   await store.reloadEntries()
 
 }

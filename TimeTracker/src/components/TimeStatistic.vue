@@ -8,7 +8,6 @@
           class=""
       >
         <p :class="{'text-red':colorRed(category[1])}">{{FormatDate(category[1])}}</p>
-
       </v-card-item>
     </v-card>
   </v-card-item>

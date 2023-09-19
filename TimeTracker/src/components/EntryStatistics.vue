@@ -13,7 +13,7 @@ import {useEntryStore} from "@/stores/entry";
 import {storeToRefs} from "pinia";
 import TimeStatistic from "@/components/TimeStatistic.vue";
 const store = useEntryStore()
-const {goalTimeMapping,totalTimePerCategory, missingTimePerCategory,totalTimeSpentList} = storeToRefs(store)
+const {goalTimeMapping,totalTimePerCategory, missingTimePerCategory} = storeToRefs(store)
 
 
 
