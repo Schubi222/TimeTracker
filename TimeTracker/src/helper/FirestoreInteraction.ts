@@ -19,8 +19,8 @@ export async function getSortedDocs(path:string){
 }
 
 export async function updateGoalTimes(time:number, category:string){
-    const cityRef = doc(db, 'Categories', 'Predefined')
-    await setDoc(cityRef, { CategoryTimeGoalMap:  {[category]: time}}, { merge: true })
+    const doRef = doc(db, 'Categories', 'Predefined')
+    await setDoc(doRef, { CategoryTimeGoalMap:  {[category]: time}}, { merge: true })
 }
 
 export async function deleteDocFromFirestore(path:string, id:string){

@@ -1,0 +1,12 @@
+.Trashcan {
+  cursor: pointer;
+  scale: 1.2;
+  transition: all 0.4s;
+  margin-left: 10px;
+}
+.Trashcan:hover {
+  color: #525252;
+  transform: scale(1.2);
+}
+
+/*# sourceMappingURL=Reusables.css.map */

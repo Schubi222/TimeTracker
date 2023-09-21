@@ -1,0 +1,27 @@
+.Category-Setting-Element-Wrapper {
+  display: flex;
+  align-items: flex-start;
+}
+.Category-Setting-Element-Wrapper .custom-title {
+  margin: 10px 0;
+}
+
+.Add-Category-Wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+  padding-bottom: 10px;
+}
+.Add-Category-Wrapper .Add-Category {
+  font-size: 2rem;
+  cursor: pointer;
+  transition: all 0.4s;
+}
+.Add-Category-Wrapper .Add-Category:hover {
+  color: #525252;
+  transform: scale(1.2);
+}
+
+/*# sourceMappingURL=CategorySettingElement.css.map */

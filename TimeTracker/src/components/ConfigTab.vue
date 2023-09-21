@@ -4,7 +4,11 @@
       <v-card-item v-for="category of goalTimeMapping" :key="category[0]" class="">
         <GoalSettingElement :category="category" />
       </v-card-item>
+
     </v-card>
+  </v-card-item>
+  <v-card-item title="Category Settings">
+    <CategorySettingElement/>
   </v-card-item>
 </template>
 
@@ -12,6 +16,7 @@
 import { useEntryStore } from '@/stores/entry'
 import { storeToRefs } from 'pinia'
 import GoalSettingElement from "@/components/GoalSettingElement.vue";
+import CategorySettingElement from "@/components/CategorySettingElement.vue";
 const store = useEntryStore()
 const { goalTimeMapping } = storeToRefs(store)
 
