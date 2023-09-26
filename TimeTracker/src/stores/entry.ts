@@ -3,7 +3,7 @@ import { defineStore } from 'pinia'
 import {QueryDocumentSnapshot} from "firebase/firestore";
 import db from "@/firestore/firestoreInit";
 
-import { sortEntriesByMetric} from "@/helper/SortFirestoreEntries";
+import {sortEntriesByMetric, sortString} from "@/helper/SortFirestoreEntries";
 import {calculateTotalTime} from "@/helper/CalculateTime";
 import {getDocFromFirestore, getSortedDocs} from "@/helper/FirestoreInteraction";
 
@@ -21,11 +21,12 @@ export const useEntryStore = defineStore('entry', () => {
   const reloadEntries = async () =>{
     entries.value = await getSortedDocs("Entries")
     totalTimeSpent()
+    await loadCategories()
     calculateTotalTimePerCategory()
     await calculateMissingTime()
   }
   const loadCategories = async () =>{
-    categories.value = (await getDocFromFirestore("Categories", "Predefined"))?.data()?.Name
+    categories.value = (await getDocFromFirestore("Categories", "Predefined"))?.data()?.Name.sort()
   }
 
   const totalTimeSpent = () =>{
@@ -53,6 +54,9 @@ export const useEntryStore = defineStore('entry', () => {
       overallTotalTime += time_total
       totalTimePerCategory.value.set(category, time_total)
     }
+    totalTimePerCategory.value = new Map ([...totalTimePerCategory.value.entries()].sort(
+        (a,b) =>{return sortString(a[0][0],b[0][0])}
+    ))
     totalTimePerCategory.value.set('Total', overallTotalTime)
   }
 
@@ -62,7 +66,9 @@ export const useEntryStore = defineStore('entry', () => {
       if (typeof testElement[1] !== "number") return
       goalTimeMapping.value.set(testElement[0], testElement[1])
     }
-
+    goalTimeMapping.value = new Map ([...goalTimeMapping.value.entries()].sort(
+        (a,b) =>{return sortString(a[0][0],b[0][0])}
+    ))
     for (const entry of goalTimeMapping.value) {
         const missingTime:number = (entry[1] || 0) - (totalTimePerCategory.value.get(entry[0]) || 0)
         missingTimePerCategory.value?.set(entry[0],missingTime)

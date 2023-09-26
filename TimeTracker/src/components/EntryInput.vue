@@ -1,5 +1,5 @@
 <template>
-    <v-card-item class="mx-auto Entry-Input-Card" variant="tonal">
+    <v-card-item class="mx-auto Entry-Input-Card elevation-4" variant="tonal">
       <v-form @submit.prevent="validateForm" ref="form">
         <v-text-field
             type="time"
@@ -69,6 +69,9 @@ import {onMounted, ref} from "vue";
         userid:1,
       }
       await addDocToFirestore(newEntry)
+      time.value = '00:00'
+      cause.value = ''
+      category.value = categories.value[0]
       await store.reloadEntries()
 
     }
@@ -86,7 +89,6 @@ import {onMounted, ref} from "vue";
   margin:10px 0;
   max-width: 300px;
   width: 100%;
-  box-shadow: 1px 1px 5px 1px #dedede;
 }
 .Entry-Input-Submit{
   border: 1px solid #dedede !important;

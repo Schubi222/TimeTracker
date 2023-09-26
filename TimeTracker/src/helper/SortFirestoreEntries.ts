@@ -1,7 +1,7 @@
 import {QueryDocumentSnapshot} from "firebase/firestore";
 import {calculateMinutesFromString} from "@/helper/CalculateTime";
 
-export function sortEntriesByMetric(a:QueryDocumentSnapshot, b:QueryDocumentSnapshot, metric:string, ascending=true):number {
+export function sortEntriesByMetric(a:QueryDocumentSnapshot, b:QueryDocumentSnapshot, metric:string, ascending=false):number {
 
     const first_data = a.data()[metric]
     const second_data = b.data()[metric]
@@ -21,6 +21,14 @@ export function sortEntriesByMetric(a:QueryDocumentSnapshot, b:QueryDocumentSnap
         }else{
             return ascending ? 1 : -1
         }
+    }
+}
 
+export function sortString (first_data:string, second_data:string, ascending= false){
+    if (first_data === second_data) return 0
+    if (first_data > second_data){
+        return ascending ? -1 : 1
+    }else{
+        return ascending ? 1 : -1
     }
 }

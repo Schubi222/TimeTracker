@@ -14,3 +14,8 @@ export enum sortable {
     cause = "cause",
     date = "date",
 }
+export enum filterable {
+    category = "category",
+    cause = "cause",
+    date = "date",
+}
