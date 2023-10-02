@@ -63,20 +63,29 @@ export const useEntryStore = defineStore('entry', () => {
   const loadGoalTimeMapping = async () =>{
     const GoalTimeMap = (await getDocFromFirestore("Categories", "Predefined"))?.data()?.CategoryTimeGoalMap
     goalTimeMapping.value = new Map()
+    let totalGoal = 0
     for (const testElement of Object.entries(GoalTimeMap)) {
       if (typeof testElement[1] !== "number") return
       goalTimeMapping.value.set(testElement[0], testElement[1])
+      totalGoal += testElement[1]
     }
     goalTimeMapping.value = new Map ([...goalTimeMapping.value.entries()].sort(
         (a,b) =>{return sortString(a[0][0],b[0][0])}
     ))
+    goalTimeMapping.value.set('Total', totalGoal)
   }
   const calculateMissingTime = async () => {
     missingTimePerCategory.value = new Map()
-    for (const entry of goalTimeMapping.value) {
-        const missingTime:number = (entry[1] || 0) - (totalTimePerCategory.value.get(entry[0]) || 0)
-        missingTimePerCategory.value?.set(entry[0],missingTime)
-      }
+    let totalMissing = 0
+    for (const entry of goalTimeMapping.value)
+    {
+      if (entry[0] === 'Total'){continue}
+
+      const missingTime:number = (entry[1] || 0) - (totalTimePerCategory.value.get(entry[0]) || 0)
+      totalMissing += missingTime > 0 ? missingTime  : 0
+      missingTimePerCategory.value?.set(entry[0],missingTime)
+    }
+    missingTimePerCategory.value.set('Total', totalMissing)
   }
 
   const reloadCategories = async () =>{

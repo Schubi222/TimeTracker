@@ -5,19 +5,19 @@
       icon="fa-solid fa-pencil"
       class="Edit-Btn"
       @click="edit"
-      v-if="!displayEdit"
+      v-if="!displayEdit && props.category[0] !== 'Total'"
     />
     <font-awesome-icon
       icon="fa-solid fa-x"
       class="Edit-Btn text-red-darken-2"
       @click="edit"
-      v-if="displayEdit"
+      v-if="displayEdit && props.category[0] !== 'Total'"
     />
     <font-awesome-icon
       icon="fa-solid fa-floppy-disk"
       class="Edit-Btn"
       @click="changeGoal"
-      v-if="displayEdit"
+      v-if="displayEdit && props.category[0] !== 'Total'"
     />
   </div>
   <p v-if="!displayEdit">{{ FormatDate(category[1]) }}</p>
@@ -54,10 +54,12 @@ const edit = () => {
   displayEdit.value = !displayEdit.value
 }
 const changeGoal = async () => {
+  if(props.category[0] === 'Total') return
+
   displayEdit.value = false
   const timeToPost = calculateMinutesFromString(time.value)
   await updateGoalTimes(timeToPost, props.category[0])
-  await store.calculateMissingTime()
+  await store.reloadCategories()
 }
 </script>
 
