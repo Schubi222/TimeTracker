@@ -59,6 +59,7 @@ import {onMounted, ref} from "vue";
   const validateForm = async () =>{
 
     const valid = await form.value?.validate()
+    if (categories.value.length === 0){return}
 
     if(valid?.valid){
       const newEntry = {

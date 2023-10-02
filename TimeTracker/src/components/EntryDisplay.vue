@@ -161,7 +161,7 @@ const filterSelectionOptions = computed(() => {
     setFilterOption()
     return []
   }
-  return 'TBA'
+  return []
 })
 const dateConvert = (s: any) => {
   return dayjs(s.date.toDate()).format('DD/MM/YY')

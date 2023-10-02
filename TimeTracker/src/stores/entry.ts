@@ -40,6 +40,7 @@ export const useEntryStore = defineStore('entry', () => {
   }
   const calculateTotalTimePerCategory = () =>{
     let overallTotalTime = 0
+    totalTimePerCategory.value = new Map()
     for (const category of categories.value)
     {
       if (!entries.value){
@@ -59,9 +60,9 @@ export const useEntryStore = defineStore('entry', () => {
     ))
     totalTimePerCategory.value.set('Total', overallTotalTime)
   }
-
-  const calculateMissingTime = async () => {
+  const loadGoalTimeMapping = async () =>{
     const GoalTimeMap = (await getDocFromFirestore("Categories", "Predefined"))?.data()?.CategoryTimeGoalMap
+    goalTimeMapping.value = new Map()
     for (const testElement of Object.entries(GoalTimeMap)) {
       if (typeof testElement[1] !== "number") return
       goalTimeMapping.value.set(testElement[0], testElement[1])
@@ -69,10 +70,20 @@ export const useEntryStore = defineStore('entry', () => {
     goalTimeMapping.value = new Map ([...goalTimeMapping.value.entries()].sort(
         (a,b) =>{return sortString(a[0][0],b[0][0])}
     ))
+  }
+  const calculateMissingTime = async () => {
+    missingTimePerCategory.value = new Map()
     for (const entry of goalTimeMapping.value) {
         const missingTime:number = (entry[1] || 0) - (totalTimePerCategory.value.get(entry[0]) || 0)
         missingTimePerCategory.value?.set(entry[0],missingTime)
       }
+  }
+
+  const reloadCategories = async () =>{
+    await loadCategories()
+    await loadGoalTimeMapping()
+    await calculateMissingTime()
+    calculateTotalTimePerCategory()
   }
 
   onBeforeMount( async () => {
@@ -80,10 +91,13 @@ export const useEntryStore = defineStore('entry', () => {
     await reloadEntries()
     totalTimeSpent()
     calculateTotalTimePerCategory()
+    await loadGoalTimeMapping()
     await calculateMissingTime()
   })
 
   return {
     entries, reloadEntries, categories, totalTimeSpentList, loadCategories,
-    missingTimePerCategory,totalTimePerCategory, goalTimeMapping, calculateMissingTime }
+    missingTimePerCategory,totalTimePerCategory, goalTimeMapping, calculateMissingTime,
+    reloadCategories
+  }
 })

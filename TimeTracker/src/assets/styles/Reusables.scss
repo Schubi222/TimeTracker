@@ -8,3 +8,11 @@
     transform: scale(1.2);
   }
 }
+.Save-Btn{
+  transition: all .4s;
+  cursor: pointer;
+  &:hover{
+    color: #525252;
+    transform: scale(1.2);
+  }
+}
