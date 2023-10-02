@@ -36,7 +36,7 @@
 </template>
 
 <script setup lang="ts">
-import {onMounted, ref} from "vue";
+import {onMounted, ref, watch} from "vue";
 
   import {serverTimestamp} from "firebase/firestore"
 
@@ -55,6 +55,10 @@ import {onMounted, ref} from "vue";
   const category = ref()
 
   const form = ref<undefined|VForm>()
+
+  watch(categories, () =>{
+    category.value = categories.value[0]
+  })
 
   const validateForm = async () =>{
 

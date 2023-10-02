@@ -49,12 +49,11 @@ export async function deleteCategoryFromFirestore(category:string){
     let array = [...docRef.data()?.Name || undefined]
     array = array.filter((e) =>{ return e !== category})
 
-    const mapping1 = {...docRef.data()?.CategoryTimeGoalMap || null}
-    delete mapping1[category]
-    console.log(mapping1)
+    const mapping = {...docRef.data()?.CategoryTimeGoalMap || null}
+    delete mapping[category]
+
     await updateDoc(docRef.ref,{Name:array})
-    await updateDoc(docRef.ref,{CategoryTimeGoalMap:mapping1})
-    console.log(docRef.data()?.CategoryTimeGoalMap)
+    await updateDoc(docRef.ref,{CategoryTimeGoalMap:mapping})
 }
 
 export async function addDocToFirestore(newEntry:Object){
